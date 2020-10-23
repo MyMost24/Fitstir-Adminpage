@@ -61,15 +61,10 @@
 </template>
 
 <script>
-    import Buttons from "../components/Buttons";
-    import Textinput from "../components/Textinput";
+
     export default {
         name:"Login",
-        component: {Buttons, Textinput},
-        comments: {
-            Textinput,
-            Buttons
-        },
+
         data: () => ({
             user: {
                 username: null,

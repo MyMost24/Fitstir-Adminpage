@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Uploadvideo from  './Uploadvideo';
-import Playlistvideo from './Playlist Video'
+import Playlistvideo from './PlaylistVideo'
 
 
 Vue.use(VueRouter)
@@ -18,7 +18,7 @@ const routes = [
     children : [
       {
         path : '',
-        component : () => import('../views/Upload/index')
+        component : () => import('../views/UploadVideo/index')
       },
       Uploadvideo,
       Playlistvideo,
