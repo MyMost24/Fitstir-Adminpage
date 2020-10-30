@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app id="inspire" style="background-image: url('./assets/Bg4.jpg')">
     <v-main class="">
       <v-container
           class="fill-height"
@@ -114,7 +114,7 @@ export default {
           this.remember__me()
         }
         await this.$router.push({
-          name: 'listvideo'
+          name: 'VideoView'
         })
       }
     }

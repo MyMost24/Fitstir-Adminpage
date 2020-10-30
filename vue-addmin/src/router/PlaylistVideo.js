@@ -1,10 +1,10 @@
 export  default  {
-    path : "playlist",
+    path : "playlists",
     component : () => import('../views/Playlist/Template'),
     children : [
         {
-            path : "index",
-            name : "playlistvideo",
+            path : "playlist",
+            name : "videoplaylist",
             component : () => import('../views/Playlist/index')
         },
     ]
