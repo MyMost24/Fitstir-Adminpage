@@ -103,9 +103,9 @@ const actions = {
         formData.append("last_name", params.last_name);
         formData.append("username", params.username);
         formData.append("password", params.password);
+        formData.append("password_confirm", params.password_confirm);
         formData.append("email", params.email);
-        formData.append("is_active", params.is_active);
-        return await CORE.post('/api/user/', formData)
+        return await CORE.post('/accounts/register/', formData)
 
     },
     //Get User by id

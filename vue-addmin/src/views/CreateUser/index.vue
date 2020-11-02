@@ -30,10 +30,10 @@
               <v-text-field v-model=" form.email" required outlined label="Email" prepend-inner-icon="mdi-email"
                             type="email"/>
                </v-flex>
-<!--            <v-flex md6 xs12>-->
-<!--              <v-text-field v-model=" form.password2" class="t-ml-0 md:t-ml-2" required outlined-->
-<!--                            label="Confirm password" type="password"/>-->
-<!--            </v-flex>-->
+            <v-flex md6 xs12>
+              <v-text-field v-model=" form.password_confirm" class="t-ml-0 md:t-ml-2" required outlined
+                            label="Confirm password" type="password"/>
+            </v-flex>
 
           </v-layout>
 
@@ -62,8 +62,8 @@ export default {
       last_name: null,
       username:null,
       password:null,
+      password_confirm:null,
       email:null,
-      is_active: false
     }
   }),
   computed:{
