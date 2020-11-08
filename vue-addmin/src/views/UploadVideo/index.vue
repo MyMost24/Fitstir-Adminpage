@@ -177,7 +177,6 @@ export default {
   data: () => {
     return {
       e1: 1,
-      defaultButtonText: 'Upload',
       isSelecting: false,
       selectedVideoName: null,
       selectedImage: null,

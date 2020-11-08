@@ -37,6 +37,25 @@ const actions = {
         return await CORE.post('/api/challenge/', formData)
 
     },
+    async createVideoChallenge(context, form){
+        var formData = new FormData();
+        formData.append("title",form.title);
+        formData.append("video",form.video);
+        formData.append("image", form.image);
+        formData.append("challenge", form.challenge);
+        formData.append("user", form.user);
+        return await CORE.post('/api/videochallenge/', formData)
+    },
+    async postVideoChallenge(context,params){
+        let request = await axios.post('/backend/inchallenge/',params)
+            .then((r)=>{
+                return r.data;
+            })
+            .catch((e)=>{
+                return e.response.data;
+            })
+        return request;
+    },
     async getChallengeById(context, pk){
       let challenge = await axios.get(`/api/inchallenge/${pk}`)
           .then((r)=>{
