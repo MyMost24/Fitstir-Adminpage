@@ -16,7 +16,7 @@
              v-if="VIDEOCHOOSE.image" class=" t-h-32 t-w-64"
              :src="'http://localhost:8000'+ VIDEOCHOOSE.image"
              ref="image" alt="">
-        <img v-else-if="" class=" t-h-32 t-w-64" :src="selectedImage" ref="image" alt="" style="height: 300px;">
+        <img v-else class=" t-h-32 t-w-64" :src="VIDEOCHOOSE.image" ref="image" alt="" style="height: 300px;">
         <br/>
         <input accept="image/jpeg,image/jpg,image/*" type="file" id="fileUpload" ref="file"
                v-on:change="handleFileUpload()"/>
@@ -60,7 +60,23 @@
       </form>
     </v-card>
 
+    <v-dialog
+        v-model="dialog"
+        v-if="videoData"
+    >
+      <v-card>
+        <v-card-title>
+          <h2>{{ videoData.name }}</h2>
+          <v-spacer></v-spacer>
+          <v-btn @click="dialog = false">X</v-btn>
+        </v-card-title>
+        <video style="width:100%;" controls autoplay v-if="videoData" :src="'http://localhost:8000'+videoData.video"></video>
+      </v-card>
+    </v-dialog>
+
   </v-card>
+
+
 
 </template>
 
@@ -80,33 +96,37 @@ export default {
       response: false,
       tagData: [],
       selectedImage: null,
+      dialog: false,
+      videoData:{},
 
 
     };
   },
   computed: {
     VIDEOCHOOSE: sync('video/videoChoose'),
-    DIALOG: sync('video/dialogUpdate'),
+
   },
   async mounted() {
     await this.load()
   },
 
   methods: {
-    // async getBase64Image(img) {
-    //   var canvas = document.createElement("canvas");
-    //   canvas.width = img.naturalWidth;
-    //   canvas.height = img.naturalHeight;
-    //   var ctx = canvas.getContext("2d");
-    //   ctx.drawImage(img, 0, 0);
-    //   var dataURL = canvas.toDataURL("image/png");
-    //   return dataURL
-    // },
+
+    async getBase64Image(img) {
+      var canvas = document.createElement("canvas");
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      var ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0);
+      var dataURL = canvas.toDataURL("image/png");
+      return dataURL
+    },
+
     load: async function () {
       let idVideo = this.$route.query.video;
-      this.video = await this.$store.dispatch('video/getVideoData', idVideo)
+      this.VIDEOCHOOSE = await this.$store.dispatch('video/getVideoData', idVideo)
       this.tagData = await this.$store.dispatch("tag/getTagList");
-      this.VIDEOCHOOSE = this.video;
+
       this.response = true
 
 
@@ -119,21 +139,25 @@ export default {
         this.VIDEOCHOOSE.image = e.target.result
         this.$refs.image.src = e.target.result
       };
+
       reader.onerror = function (error) {
         alert(error);
       };
-      await reader.readAsDataURL(file)
-      return this.selectedImage = file
+      this.VIDEOCHOOSE.image = file
+      // await reader.readAsDataURL(file)
+      // return this.selectedImage = file
 
 
     },
 
     updateVideo: async function () {
       console.log(document.getElementById("imageid"));
+      
+      console.log(this.VIDEOCHOOSE.image)
       delete this.VIDEOCHOOSE.video
       let update = await this.$store.dispatch("video/updateVideo", this.VIDEOCHOOSE);
-      this.tagData = await this.$store.dispatch("tag/getTagList");
-      if (update != false) {
+      // this.tagData = await this.$store.dispatch("tag/getTagList");
+      if (!false) {
         await Swal.fire(
             'สำเร็จ',
             'อัพโหลดวีดีโอสำเร็จแล้ว',
@@ -145,6 +169,12 @@ export default {
       }
       console.log(update)
       return update
+    },
+    async openVideoPlayer(video) {
+      this.videoData = video
+      this.dialog = true
+      console.log(this.videoData)
+
     },
 
 

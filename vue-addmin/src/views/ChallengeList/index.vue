@@ -1,8 +1,8 @@
 <template>
   <v-content>
     <v-container class="align-center" v-if="response">
-      <h2 class="text-5xl  text-white nav-txt ">Challenge
-        <hr class="w-4/12 border-red-900 border-2">
+      <h2 >Challenge
+
       </h2>
 
       <v-btn color="info" @click="$router.push('/app/createchallenge/index')"
@@ -20,11 +20,9 @@
             <v-flex md6 xs12>
               <v-card class="p-4  w-full  justify-center items-center"
                       @click="$router.push(`/app/challenge/index?id=${list.id}`)">
-                <img width="300" height="300" class=" h-40  w-full rounded-lg shadow-md bg-cover bg-center"
-                     :src="'http://localhost:8000'+list.image" alt="">
-                <v-card class=" w-56 bg-x text-white  shadow-lg rounded-lg overflow-hidden p-5">
-                  <div class="">{{ list.name }}</div>
-                </v-card>
+                <img width="300" height="300" :src="'http://localhost:8000'+ CHALLENGELISTS.image" alt="">
+                <div class="">{{ list.name }}</div>
+
               </v-card>
             </v-flex>
           </v-layout>

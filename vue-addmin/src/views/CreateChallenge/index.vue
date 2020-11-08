@@ -18,22 +18,7 @@
           <input ref="imageuploader" class="d-none" type="file" accept="image/jpeg,image/jpg,image/*" @change="onSelectImage">
         </div>
 
-
-
-        <br><br>
-
-        <div>
-          <v-btn color="primary" class="text-none" rounded depressed :loading="isSelecting" @click="onButtonClickVideo">
-            <v-icon left>
-              mdi-camcorder
-            </v-icon>
-            Upload Video
-
-
-          </v-btn>
-          <input ref="videouploader" class="d-none" type="file" accept="video/mp4,video/x-m4v,video/*" @change="onFileChanged">
-        </div>
-        <br><br>
+        <br>
 
         <v-text-field outlined label="name" type="text" v-model="form.name"/>
         <v-textarea outlined label="description" type="text" v-model="form.description"/>
@@ -65,7 +50,6 @@ export default {
       name: null,
       description: null,
       image : null,
-      video: null,
       user:null,
     }
 

@@ -9,7 +9,8 @@ const CORE = core.actions
 
 const state = {
     playLists : [],
-    playListChoose: {}
+    playListChoose: {},
+    videoplaylist: [],
 
 }
 const getters = {
@@ -41,6 +42,16 @@ const actions = {
             });
         return playlist;
     },
+    async getVideoPlaylist(context,id){
+        let request = await axios.get('/backend/videoplaylist/'+id)
+            .then((r)=>{
+                return r.data;
+            })
+            .catch((e)=>{
+                return e.response.data;
+            })
+        return request;
+    },
 
     //Create Playlist
     async createPlaylist(context, form){
@@ -54,15 +65,38 @@ const actions = {
     async updatePlaylist(context, params){
         console.log(params)
         var formData = new FormData();
+        if (typeof (params.image) === 'object') {
+            formData.append('image', params.image)
+        }
         formData.append('name', params.name);
         formData.append('description', params.description);
-        formData.append("image", params.image);
         return await  CORE.put(`/api/playlist/${params.id}`, formData)
     },
     //Delete playlist
     async deletePlaylist(context, pk){
         let playlist = await CORE.delete(`/api/playlist/${pk}`)
         return playlist;
+    },
+
+    async postVideoPlaylist(context,params){
+        let request = await axios.post('/backend/videoplaylist/',params)
+            .then((r)=>{
+                return r.data;
+            })
+            .catch((e)=>{
+                return e.response.data;
+            })
+        return request;
+    },
+    async deleteVideoPlaylist(context,id){
+        let request = await axios.delete('/backend/videoplaylist/'+ id)
+            .then((r)=>{
+                return r.data;
+            })
+            .catch((e)=>{
+                return e.response.data;
+            })
+        return request;
     }
 
 }

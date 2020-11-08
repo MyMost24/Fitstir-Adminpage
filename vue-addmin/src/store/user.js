@@ -106,8 +106,14 @@ const actions = {
         formData.append("password_confirm", params.password_confirm);
         formData.append("email", params.email);
         return await CORE.post('/accounts/register/', formData)
-
     },
+    //Add admin
+    async changeToAdmin(context, params){
+        var formData = new FormData();
+        formData.append("user", params.user);
+        return await CORE.post('/api/changetoadmin/', formData)
+    },
+
     //Get User by id
 
     async getUserById(context, pk){

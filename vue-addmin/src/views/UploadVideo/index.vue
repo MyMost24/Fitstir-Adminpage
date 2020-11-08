@@ -47,7 +47,7 @@
                           <v-icon left>
                             mdi-folder-upload
                           </v-icon>
-                          {{ buttonText }}
+                          Upload Video
 
                         </v-btn>
                         <input ref="videouploader" class="d-none" type="file" accept="video/mp4,video/x-m4v,video/*"
@@ -75,7 +75,7 @@
                           <v-icon left>
                             mdi-folder-image
                           </v-icon>
-                          {{ buttonText }}
+                          Upload image
 
                         </v-btn>
                         <input ref="imageuploader" class="d-none" type="file" accept="image/jpeg,image/jpg,image/*"
@@ -208,6 +208,7 @@ export default {
   methods: {
     ...call('video/*'),
     ...call('tag/*'),
+
     onButtonClickVideo() {
       this.isSelecting = true
       window.addEventListener('focus', () => {
@@ -256,6 +257,7 @@ export default {
       this.tags = await this.$store.dispatch('tag/getTagList')
     },
     async saveData() {
+      console.log(this.form.tag_type)
       let data = await this.saveVideo(this.form)
       if(!false){
         await alert('Upload Success')

@@ -18,7 +18,7 @@ const mutations = make.mutations(state)
 
 const actions = {
     getListChallenge: async function(){
-        let challenge = await axios.get(`/api/challenge/`)
+        let challenge = await axios.get(`/api/challenges/`)
             .then((r) => {
                 state.challengeLists = r.data;
                 return r.data;
@@ -30,7 +30,6 @@ const actions = {
     },
     async createChallenge(context, form){
         var formData = new FormData();
-        formData.append("video",form.video);
         formData.append("name",form.name);
         formData.append("image", form.image);
         formData.append("description", form.description);

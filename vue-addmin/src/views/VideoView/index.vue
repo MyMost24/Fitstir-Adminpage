@@ -38,6 +38,19 @@
           </td>
         </tr>
         </tbody>
+        <v-dialog
+            v-model="dialog"
+            v-if="videoData"
+        >
+          <v-card>
+            <v-card-title>
+              <h2>{{ videoData.name }}</h2>
+              <v-spacer></v-spacer>
+              <v-btn @click="dialog = false">X</v-btn>
+            </v-card-title>
+            <video style="width:100%;" controls autoplay v-if="videoData" :src="videoData.video"></video>
+          </v-card>
+        </v-dialog>
       </template>
     </v-data-table>
 
@@ -54,6 +67,8 @@ export default {
     return {
       search: '',
       response: false,
+      dialog: false,
+      videoData:{},
       headers: [
         {
           text: 'video',
@@ -94,6 +109,12 @@ export default {
         await this.$store.dispatch('video/deleteVideo', pk)
         await this.loadData()
       }
+    },
+    async openVideoPlayer(video) {
+      this.videoData = video
+      this.dialog = true
+      console.log(this.videoData)
+
     },
 
 

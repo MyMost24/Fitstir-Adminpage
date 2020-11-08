@@ -11,7 +11,7 @@ const state = {
     rr: null,
     videoLists: [],
     videoChoose: {},
-    dialogUpdate: false,
+
 }
 const getters = {
 
@@ -34,10 +34,12 @@ const actions = {
     async updateVideo(context, params) {
         var formData = new FormData();
         formData.append("name", params.name);
-        formData.append("image", params.image);
+        if (typeof (params.image) ===  'object') {
+            formData.append('image', params.image)
+        }
         formData.append("description", params.description);
         formData.append("tag_type", params.tag_type);
-        let video = await axios.put(`/api/video/${params.id}`, params, formData)
+        let video = await axios.put(`/api/video/${params.id}`, formData)
             .then((r) => {
                 return r.data;
             })
