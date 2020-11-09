@@ -5,9 +5,9 @@
         <v-flex>
           <div>
             <v-card style="width: 500px; height: auto; padding: 10px">
-              <h1 v-if="currentVideo.challenge">{{ currentVideo.challenge.name }}</h1><br>
-              <h1 v-if="currentVideo.challenge.user">
-                create by : {{ currentVideo.challenge.user.first_name }} {{ currentVideo.challenge.user.last_name }}
+              <h1 v-if="getchallenge">{{ getchallenge.name }}</h1><br>
+              <h1 v-if="getchallenge.user">
+                create by : {{ getchallenge.user.first_name }} {{ getchallenge.user.last_name }}
               </h1>
               <v-btn color="primary" @click="openDialogJoin">Join Challenge</v-btn>
             </v-card>
@@ -106,6 +106,7 @@ export default {
     isSelecting: false,
     selectedVideoName: null,
     selectedImage: null,
+    getchallenge:{},
     form:{
       title: null,
       video: null,
@@ -131,10 +132,11 @@ export default {
     ...call('challenge/*'),
     loadData: async function () {
       let id = this.$route.query.id;
-      this.challenge = await this.$store.dispatch('challenge/getChallengeById', id)
-      this.CHALLENGECHOOSE = this.challenge
-      this.currentVideo = this.CHALLENGECHOOSE[0]
-      console.log(this.currentVideo)
+      this.getchallenge = await this.$store.dispatch('challenge/getChallengeById', id)
+      console.log( this.getchallenge)
+      this.inchallenge = await this.$store.dispatch('challenge/getInChallengeById', id)
+      this.CHALLENGECHOOSE = this.inchallenge
+
       this.response = true
     },
     async saveData() {

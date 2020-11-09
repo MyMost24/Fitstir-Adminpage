@@ -56,16 +56,29 @@ const actions = {
             })
         return request;
     },
+
     async getChallengeById(context, pk){
-      let challenge = await axios.get(`/api/inchallenge/${pk}`)
+        let challenge = await axios.get(`/api/challenge/${pk}`)
+            .then((r)=>{
+                return r.data
+            })
+            .catch(async (e)=>{
+                return false;
+            });
+        return challenge
+    },
+
+    async getInChallengeById(context, pk){
+      let inchallenge = await axios.get(`/api/inchallenge/${pk}`)
           .then((r)=>{
               return r.data
           })
           .catch(async (e)=>{
              return false;
           });
-      return challenge
+      return inchallenge
     },
+
 
 }
 
