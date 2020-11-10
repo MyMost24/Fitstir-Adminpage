@@ -40,7 +40,7 @@
 
 
         </v-layout>
-        <v-checkbox label="ตั้งค่าเป็นแอดมิน" v-model="is_staff"></v-checkbox>
+<!--        <v-checkbox label="ตั้งค่าเป็นแอดมิน" v-model="is_staff" @click="addToAdmin()"></v-checkbox>-->
 
         <v-card-actions>
           <div class="t-w-full">
@@ -63,7 +63,7 @@ import {call, sync} from 'vuex-pathify'
 export default {
   name: "index",
   data: () => ({
-    is_staff: null,
+
     form: {
       first_name: null,
       last_name: null,
@@ -80,15 +80,16 @@ export default {
   methods: {
     ...call('user/*'),
     async createUser() {
-      this.form.is_active = true
       let data = await this.$store.dispatch('user/createUser', this.form)
-      if (!false) {
+      if (data) {
         await alert('Create Success')
         await this.$router.push('/app/user/index')
       }
+
       console.log(this.form)
       return data
     },
+
     async addToAdmin(){
       this.is_staff = true
     }

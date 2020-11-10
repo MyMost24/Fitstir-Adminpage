@@ -9,6 +9,7 @@ const CORE = core.actions;
 
 const state = {
     userLists :[],
+    adminList:[],
     userChoose : {},
     userProfile :{}
 }
@@ -83,9 +84,9 @@ const actions = {
                 return null
             })
     },
-    //Get User admin
+    //Get User
     async getUserList(context, params){
-        let video = await axios.get(`/api/user/`)
+        let user = await axios.get(`/api/user/`)
             .then((r) => {
                 state.userLists = r.data;
                 return r.data;
@@ -94,7 +95,20 @@ const actions = {
                 return false;
             });
 
-        return video;
+        return user;
+    },
+    //Get Admin
+    async getAdminList(context, params){
+        let admin = await axios.get(`/api/admin/`)
+            .then((r) => {
+                state.adminList = r.data;
+                return r.data;
+            })
+            .catch(async (e) => {
+                return false;
+            });
+
+        return admin;
     },
     //Create User by admin
     async createUser(context, params){
@@ -132,6 +146,7 @@ const actions = {
         formData.append('first_name',params.first_name)
         formData.append('last_name',params.last_name)
         formData.append('email',params.email)
+        formData.append('is_staff',params.is_staff)
         return await CORE.put(`/api/user/${params.id}`, params, formData)
 
     },

@@ -9,16 +9,18 @@
     <v-card class="t-p-8">
 
 
-          <v-text-field v-model=" USERCHOOSE.first_name" required outlined label="First Name"
-                        prepend-inner-icon="mdi-account-card-details" type="text"/><br>
+      <v-text-field v-model=" USERCHOOSE.first_name" required outlined label="First Name"
+                    prepend-inner-icon="mdi-account-card-details" type="text"/>
+      <br>
 
-          <v-text-field v-model=" USERCHOOSE.last_name" class="t-ml-0 md:t-ml-2" required outlined label="Last Name"
-                        prepend-inner-icon="mdi-account-card-details" type="text"/><br>
+      <v-text-field v-model=" USERCHOOSE.last_name" class="t-ml-0 md:t-ml-2" required outlined label="Last Name"
+                    prepend-inner-icon="mdi-account-card-details" type="text"/>
+      <br>
 
-          <v-text-field v-model=" USERCHOOSE.email" required outlined label="Email" prepend-inner-icon="mdi-email"
-                        type="email"/>
+      <v-text-field v-model=" USERCHOOSE.email" required outlined label="Email" prepend-inner-icon="mdi-email"
+                    type="email"/>
 
-
+      <v-checkbox label="ตั้งค่าเป็นแอดมิน" v-model="USERCHOOSE.is_staff"></v-checkbox>
 
       <v-card-actions>
         <div class="t-w-full">
@@ -36,30 +38,31 @@
 
 <script>
 import {call, sync} from 'vuex-pathify'
+
 export default {
   name: "index",
-  data :()=>({
-    user:[]
+  data: () => ({
+    user: []
   }),
-  computed:{
+  computed: {
     USERCHOOSE: sync('user/userChoose')
 
   },
   async mounted() {
     await this.load()
   },
-  methods:{
+  methods: {
     ...call('user/*'),
-    load : async function(){
+    load: async function () {
       let idUser = this.$route.query.user;
       this.user = await this.$store.dispatch('user/getUserById', idUser)
       this.USERCHOOSE = this.user
       console.log(this.USERCHOOSE)
 
     },
-    async updateUser(){
+    async updateUser() {
       let update = await this.$store.dispatch('user/UpdateUser', this.USERCHOOSE);
-      if(!false){
+      if (!false) {
         alert('Update Success')
         this.$router.push('/app/user/index')
       }
