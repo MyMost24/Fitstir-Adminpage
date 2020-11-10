@@ -170,7 +170,7 @@
                   <div class="column" style="margin-left: 10px">
                     <v-card >
                       <h2 v-if="item.comment">{{ item.comment.user.first_name }} {{ item.comment.user.last_name }}</h2>
-                      <h2 v-if="item.comment">{{item.comment.commentText}}</h2>
+                      <p v-if="item.comment">{{item.comment.commentText}}</p>
                     </v-card><br>
                   </div>
 
