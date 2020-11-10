@@ -79,23 +79,13 @@ const actions = {
     },
 
     async postVideoPlaylist(context,params){
-        let request = await axios.post('/backend/videoplaylist/',params)
-            .then((r)=>{
-                return r.data;
-            })
-            .catch((e)=>{
-                return e.response.data;
-            })
+        let request = await CORE.post('/backend/videoplaylist/',params)
+
         return request;
     },
     async deleteVideoPlaylist(context,id){
-        let request = await axios.delete('/backend/videoplaylist/'+ id)
-            .then((r)=>{
-                return r.data;
-            })
-            .catch((e)=>{
-                return e.response.data;
-            })
+        let request = await CORE.delete(`/backend/videoplaylist/${id}`)
+
         return request;
     }
 

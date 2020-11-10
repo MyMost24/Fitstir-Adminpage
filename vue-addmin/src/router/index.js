@@ -15,6 +15,7 @@ import CreatePlaylist from "@/router/CreatePlaylist";
 import CreateChallenge from "@/router/CreateChallenge";
 import ChallengeList from "@/router/ChallengeList";
 import PlaylistPage from "@/router/PlaylistPage";
+import VideoChallenge from "@/router/VideoChallenge";
 
 
 
@@ -49,6 +50,7 @@ const routes = [
             CreateChallenge,
             Challenge,
             PlaylistPage,
+            VideoChallenge,
         ]
     },
 
