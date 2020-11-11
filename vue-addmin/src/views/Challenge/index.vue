@@ -118,12 +118,10 @@
         <v-card>
 
 
-
-
           <div class="flex flex-wrap">
 
-            <div class="p-0 md:p-2 w-full md:w-8/12 " >
-              <div >
+            <div class="p-0 md:p-2 w-full md:w-8/12 ">
+              <div>
                 <v-btn class="v-btn--rounded" @click="dialog2 = false">X</v-btn>
               </div>
 
@@ -147,9 +145,16 @@
                   </div>
 
                   <br>
-                  <div class="flex">
+                  <div class="flex " v-if="hidden === false">
                     <h2 v-if="inVideo.video">{{ inVideo.video.title }}</h2>
                     <v-spacer></v-spacer>
+                  </div>
+                  <div class="flex " v-if="hidden === true">
+                    <v-text-field outlined v-if="inVideo.video">{{ inVideo.video.title }}</v-text-field>
+                    <br/>
+                    <v-btn>save</v-btn>
+                    <v-btn @click="hidden=false">cancel</v-btn>
+
                   </div>
 
                   <br>
@@ -158,28 +163,98 @@
                     <h2 v-if="inVideo.challenge"> {{ inVideo.challenge.name }}</h2>
                   </div>
                 </div>
-                <div class="flex-column">
-                  <v-btn><v-icon></v-icon></v-btn>
+                <div class="flex-column align-end">
+                  <v-menu
+                      transition="slide-y-transition"
+                      bottom
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                          class="mx-16"
+                          fab
+                          small
+                          v-bind="attrs"
+                          v-on="on"
+                      >
+                        <v-icon>mdi-dots-vertical</v-icon>
+                      </v-btn>
+                    </template>
+                    <v-list>
+                      <v-list-item-group>
+                        <v-list-item>
+                          <v-list-item-content @click="hidden = true">
+                            <v-list-item-title>แก้ไข</v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-list-item-group>
+                      <v-list-item-group>
+                        <v-list-item>
+                          <v-list-item-content>
+                            <v-list-item-title>ลบ</v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-list-item-group>
+                    </v-list>
+
+                  </v-menu>
+
+
                 </div>
 
               </div>
 
               <v-divider></v-divider>
               <br>
-              <div v-chat-scroll class="column  overflow-x-auto"  style="height: 400px; width: auto" >
+              <div v-chat-scroll class="column  overflow-x-auto" style="height: 400px; width: auto">
 
-                <div class="row" v-for="item, index in commentList" :key="index">
+                <div class="row " v-for="item, index in commentList" :key="index">
                   <div class="column" style="margin-left: 15px">
                     <img v-if="item.comment"
                          :src="'http://localhost:8000'+item.comment.user.userdetail.image" alt=""
                          width="30" height="30">
                   </div>
-                  <div class="column" style="margin-left: 10px; max-width: 400px">
+                  <div class="column" style="margin-left: 10px; max-width: 300px">
                     <v-card outlined class="my-1 mx-2">
-                      <p class="ma-0 pa-0" v-if="item.comment">{{ item.comment.user.first_name }} {{ item.comment.user.last_name }}</p>
+                      <p class="ma-0 pa-0" v-if="item.comment">{{ item.comment.user.first_name }}
+                        {{ item.comment.user.last_name }}</p>
                       <p class="ma-0 pa-0" v-if="item.comment">{{ item.comment.commentText }}</p>
                     </v-card>
                     <br>
+                  </div>
+                  <div class="column" style="margin-left: 15px" v-if="item.comment.user.id == userProfile.pk">
+                    <v-menu
+                        transition="slide-y-transition"
+                        bottom
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                            class="mx-16"
+                            fab
+                            small
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                          <v-icon>mdi-dots-horizontal</v-icon>
+                        </v-btn>
+                      </template>
+                      <v-list>
+                        <v-list-item-group>
+                          <v-list-item>
+                            <v-list-item-content @click="hidden = true">
+                              <v-list-item-title>แก้ไข</v-list-item-title>
+                            </v-list-item-content>
+                          </v-list-item>
+                        </v-list-item-group>
+                        <v-list-item-group>
+                          <v-list-item>
+                            <v-list-item-content @click="deleteComment(item.id)">
+                              <v-list-item-title>{{ item.comment.id }}</v-list-item-title>
+                            </v-list-item-content>
+                          </v-list-item>
+                        </v-list-item-group>
+                      </v-list>
+
+                    </v-menu>
                   </div>
 
                 </div>
@@ -210,12 +285,15 @@ import {call, sync} from 'vuex-pathify'
 import swal from "sweetalert2";
 import Vue from 'vue'
 import VueChatScroll from 'vue-chat-scroll'
+
 Vue.use(VueChatScroll)
 
 export default {
   name: "index",
   data: () => ({
+    hidden: false,
     response: false,
+    selectedItem: 1,
     responseComment: false,
     currentVideo: null,
     currentComment: null,
@@ -368,11 +446,11 @@ export default {
       this.inVideo = video
       let pk = this.inVideo.video.id
       this.commentList = await this.getVideoChallenge(pk)
-      console.log(this.commentList)
+      // console.log(this.commentList[0])
       this.currentComment = this.commentList[0]
       this.dialog2 = true
-      console.log(this.inVideo.video.user)
-      console.log(this.currentComment.comment.user)
+      // console.log(this.inVideo.video.user)
+      // console.log(this.currentComment.comment.user)
 
     },
     async saveComment() {
@@ -402,15 +480,24 @@ export default {
 
         }
       }
-
-
       return data
-
-
     },
     async enterPress() {
       await this.saveComment()
+    },
+    async deleteComment(id) {
+      console.log(id)
+      if (confirm('Do you want to delete?')) {
+        if (!false) {
+          await alert('deleted')
+          await this.deleteCommentById(id)
+          let pk = this.inVideo.video.id
+          this.commentList = await this.getVideoChallenge(pk)
+          await this.loadData()
+        }
+      }
     }
+
 
   },
 }

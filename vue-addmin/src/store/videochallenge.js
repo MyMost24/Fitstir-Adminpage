@@ -37,8 +37,8 @@ const actions = {
         let request = await CORE.post('/backend/invideochallenge/',params)
         return request;
     },
-    async deleteComment(context,id){
-        let request = await CORE.delete(`/backend/invideochallenge/${id}`)
+    async deleteCommentById(context,id){
+        let request = await CORE.delete(`/api/invideochallenge/${id}`)
         return request
 
     },
