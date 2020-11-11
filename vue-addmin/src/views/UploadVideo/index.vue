@@ -236,21 +236,11 @@ export default {
 
     },
     onSelectImage(e) {
-      var files = e.target.files || e.dataTransfer.files;
+      var file = e.target.files || e.dataTransfer.files;
       this.form.image = e.target.files[0]
-      if (!files.length)
-        return this.createImage(files[0]);
+      this.selectedImage = URL.createObjectURL(e.target.files[0]);
     },
-    createImage(file) {
-      this.selectedImage = new Image();
-      var reader = new FileReader();
-      var vm = this;
 
-      reader.onload = (e) => {
-        vm.selectedImage = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    },
 
     async loadData() {
       this.tags = await this.$store.dispatch('tag/getTagList')

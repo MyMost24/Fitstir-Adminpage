@@ -15,7 +15,7 @@
 
           <td class="t-w-64  t-p-4">
             <div class="t-w-full t-flex t-flex-row t-items-center w3-medium ">
-              <img width="60" height="60" :src="video.image" alt="">
+              <img style="width: 60px ; height: 60px;" :src="video.image" alt="">
               {{ video.name }}
             </div>
           </td>

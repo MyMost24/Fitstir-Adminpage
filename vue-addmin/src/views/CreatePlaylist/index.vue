@@ -63,8 +63,9 @@ export default {
         alert(error);
       };
       console.log(file)
+      this.selectedImage = URL.createObjectURL(file)
       this.form.image = file
-      
+
     },
     async createPlaylist() {
       this.form.user = this.userProfile.pk

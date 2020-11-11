@@ -237,6 +237,7 @@ export default {
       reader.onerror = function (error) {
         alert(error);
       };
+      this.selectedImage = URL.createObjectURL(file)
       this.PLAYLISTCHOOSE.image = file
       // await reader.readAsDataURL(file)
       // return this.selectedImage = file
