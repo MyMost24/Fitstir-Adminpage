@@ -39,7 +39,7 @@
                     <h3 v-if="videos.video.title"> {{ videos.video.title }}</h3>
                     <div class="row flex-wrap">
                       <div>
-                        <img v-if="videos.video.user.userdetail"
+                        <img v-if="videos.video.user.userdetail" style="margin-left: 15px"
                              :src="'http://localhost:8000'+videos.video.user.userdetail.image" alt=""
                              width="30" height="30">
                       </div>
@@ -116,13 +116,17 @@
       >
 
         <v-card>
-          <v-card-title style="border-bottom: black ">
-            <v-btn @click="dialog2 = false">X</v-btn>
-          </v-card-title>
+
+
+
 
           <div class="flex flex-wrap">
 
-            <div class="p-0 md:p-2 w-full md:w-8/12">
+            <div class="p-0 md:p-2 w-full md:w-8/12 " >
+              <div >
+                <v-btn class="v-btn--rounded" @click="dialog2 = false">X</v-btn>
+              </div>
+
 
               <video style="width:100%;" controls autoplay v-if="inVideo.video"
                      :src="'http://localhost:8000'+inVideo.video.video"></video>
@@ -154,31 +158,37 @@
                     <h2 v-if="inVideo.challenge"> {{ inVideo.challenge.name }}</h2>
                   </div>
                 </div>
+                <div class="flex-column">
+                  <v-btn><v-icon></v-icon></v-btn>
+                </div>
 
               </div>
 
               <v-divider></v-divider>
               <br>
-              <div class="column">
+              <div v-chat-scroll class="column  overflow-x-auto"  style="height: 400px; width: auto" >
 
                 <div class="row" v-for="item, index in commentList" :key="index">
-                  <div class="column">
+                  <div class="column" style="margin-left: 15px">
                     <img v-if="item.comment"
                          :src="'http://localhost:8000'+item.comment.user.userdetail.image" alt=""
                          width="30" height="30">
                   </div>
-                  <div class="column" style="margin-left: 10px">
-                    <v-card >
-                      <h2 v-if="item.comment">{{ item.comment.user.first_name }} {{ item.comment.user.last_name }}</h2>
-                      <p v-if="item.comment">{{item.comment.commentText}}</p>
-                    </v-card><br>
+                  <div class="column" style="margin-left: 10px; max-width: 400px">
+                    <v-card outlined class="my-1 mx-2">
+                      <p class="ma-0 pa-0" v-if="item.comment">{{ item.comment.user.first_name }} {{ item.comment.user.last_name }}</p>
+                      <p class="ma-0 pa-0" v-if="item.comment">{{ item.comment.commentText }}</p>
+                    </v-card>
+                    <br>
                   </div>
 
                 </div>
 
               </div>
-              <div  class="fixed-bottom row">
-                <v-text-field @keyup.enter="enterPress()" v-model="form3.commentText" outlined label="comment"></v-text-field>
+
+              <div class="fixed-bottom row">
+                <v-text-field @keyup.enter="enterPress()" v-model="form3.commentText" outlined
+                              label="comment"></v-text-field>
               </div>
 
             </div>
@@ -198,6 +208,9 @@
 <script>
 import {call, sync} from 'vuex-pathify'
 import swal from "sweetalert2";
+import Vue from 'vue'
+import VueChatScroll from 'vue-chat-scroll'
+Vue.use(VueChatScroll)
 
 export default {
   name: "index",
@@ -231,7 +244,7 @@ export default {
       user: null,
       commentText: null,
     },
-    form4:{
+    form4: {
       video: null,
       comment: null,
     },
@@ -362,7 +375,7 @@ export default {
       console.log(this.currentComment.comment.user)
 
     },
-    async saveComment(){
+    async saveComment() {
       this.form3.user = this.userProfile.pk
       let pk = this.inVideo.video.id
       this.form3.video = pk
@@ -370,8 +383,8 @@ export default {
       console.log(this.form3.user)
       console.log(this.form3.video)
       console.log(data.id)
-      this.form4.comment =  data.id
-      this.form4.video =  pk
+      this.form4.comment = data.id
+      this.form4.video = pk
       if (data) {
         let addComment = await this.postComment(this.form4)
         if (addComment) {
@@ -395,7 +408,7 @@ export default {
 
 
     },
-    async enterPress(){
+    async enterPress() {
       await this.saveComment()
     }
 
