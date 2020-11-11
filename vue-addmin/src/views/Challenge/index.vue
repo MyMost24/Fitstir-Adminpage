@@ -29,15 +29,23 @@
 
             <div>
               <v-layout row>
-                <v-flex v-for="videos,index in CHALLENGECHOOSE" :key="index">
+                <div class="column" v-for="(videos,index) in CHALLENGECHOOSE" :key="index">
                   <v-card
                       @click="openVideoPlayer(videos)"
-                      width="200"
-                      height="300">
-                    <img v-if="videos.video.image" :src="'http://localhost:8000'+videos.video.image" alt=""
-                         style="height:200px; width:180px;">
-                    <h3 v-if="videos.video.title"> {{ videos.video.title }}</h3>
-                    <div class="row flex-wrap">
+                      style="width: auto; height: auto"
+                      @mouseover="active = index"
+                      @mouseout="active = -1"
+                  >
+                    <img   v-if="videos.video.image && !(active === index)" :src="'http://localhost:8000'+videos.video.image" alt=""
+                         style="height:200px; width:300px;">
+                    <div v-show="active === index">
+                      <video style="height:200px; width:300px;" controls autoplay v-if="videos.video"
+                             :src="'http://localhost:8000'+videos.video.video"></video>
+                    </div>
+
+
+                    <h3 style="padding: 10px" v-if="videos.video.title"> {{ videos.video.title }}</h3>
+                    <div class="row " style="padding: 10px">
                       <div>
                         <img v-if="videos.video.user.userdetail" style="margin-left: 15px"
                              :src="'http://localhost:8000'+videos.video.user.userdetail.image" alt=""
@@ -53,7 +61,7 @@
 
                   </v-card>
 
-                </v-flex>
+                </div>
               </v-layout>
             </div>
 
@@ -131,7 +139,6 @@
             </div>
             <div class="p-0 md:p-2 w-full md:w-4/12">
 
-
               <div class="row">
 
                 <div class="flex-column">
@@ -150,9 +157,9 @@
                     <v-spacer></v-spacer>
                   </div>
                   <div class="flex " v-if="hidden === true">
-                    <v-text-field outlined v-if="inVideo.video">{{ inVideo.video.title }}</v-text-field>
+                    <v-text-field outlined v-if="videoDataChoose.title" v-model="videoDataChoose.title"></v-text-field>
                     <br/>
-                    <v-btn>save</v-btn>
+                    <v-btn @click="editVideoTitle()">save</v-btn>
                     <v-btn @click="hidden=false">cancel</v-btn>
 
                   </div>
@@ -182,7 +189,7 @@
                     <v-list>
                       <v-list-item-group>
                         <v-list-item>
-                          <v-list-item-content @click="hidden = true">
+                          <v-list-item-content @click="getTitleVideo(inVideo.video.id)">
                             <v-list-item-title>แก้ไข</v-list-item-title>
                           </v-list-item-content>
                         </v-list-item>
@@ -205,7 +212,7 @@
 
               <v-divider></v-divider>
               <br>
-              <div v-chat-scroll class="column  overflow-x-auto" style="height: 400px; width: auto">
+              <div id="comment_scroll"  class="column  overflow-x-auto" style="height: 400px; width: auto">
 
                 <div class="row " v-for="item, index in commentList" :key="index">
                   <div class="column" style="margin-left: 15px">
@@ -214,47 +221,59 @@
                          width="30" height="30">
                   </div>
                   <div class="column" style="margin-left: 10px; max-width: 300px">
-                    <v-card outlined class="my-1 mx-2">
+                    <v-card outlined class="my-1 mx-2" style="padding: 10px">
                       <p class="ma-0 pa-0" v-if="item.comment">{{ item.comment.user.first_name }}
                         {{ item.comment.user.last_name }}</p>
                       <p class="ma-0 pa-0" v-if="item.comment">{{ item.comment.commentText }}</p>
                     </v-card>
                     <br>
                   </div>
-                  <div class="column" style="margin-left: 15px" v-if="item.comment.user.id == userProfile.pk">
-                    <v-menu
-                        transition="slide-y-transition"
-                        bottom
-                    >
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                            class="mx-16"
-                            fab
-                            small
-                            v-bind="attrs"
-                            v-on="on"
-                        >
-                          <v-icon>mdi-dots-horizontal</v-icon>
-                        </v-btn>
-                      </template>
-                      <v-list>
-                        <v-list-item-group>
-                          <v-list-item>
-                            <v-list-item-content @click="hidden = true">
-                              <v-list-item-title>แก้ไข</v-list-item-title>
-                            </v-list-item-content>
-                          </v-list-item>
-                        </v-list-item-group>
-                        <v-list-item-group>
-                          <v-list-item>
-                            <v-list-item-content @click="deleteComment(item.id)">
-                              <v-list-item-title>{{ item.comment.id }}</v-list-item-title>
-                            </v-list-item-content>
-                          </v-list-item>
-                        </v-list-item-group>
-                      </v-list>
 
-                    </v-menu>
+                  <div class="column" style="margin-left: 15px" v-if="item.comment.user.id == userProfile.pk">
+
+                    <v-btn
+
+                        fab
+                        small
+                        @click="deleteComment(item.id)"
+                    >
+                      <v-icon>mdi-delete</v-icon>
+                    </v-btn>
+
+<!--                    <v-menu-->
+
+<!--                    >-->
+<!--                      <template v-slot:activator="{ on, attrs }">-->
+<!--                        <v-btn-->
+<!--                            class="mx-16"-->
+<!--                            fab-->
+<!--                            small-->
+<!--                            v-bind="attrs"-->
+<!--                            v-on="on"-->
+<!--                        >-->
+<!--                          <v-icon>mdi-dots-horizontal</v-icon>-->
+<!--                        </v-btn>-->
+<!--                      </template>-->
+<!--                      <v-list>-->
+<!--                        &lt;!&ndash;                        <v-list-item-group>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                          <v-list-item>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                            <v-list-item-content @click="hidden = true">&ndash;&gt;-->
+<!--                        &lt;!&ndash;                              <v-list-item-title>แก้ไข</v-list-item-title>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                            </v-list-item-content>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                          </v-list-item>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                        </v-list-item-group>&ndash;&gt;-->
+<!--                        <v-list-item-group>-->
+<!--                          <v-list-item>-->
+<!--                            <v-list-item-content @click="deleteComment(item.id)">-->
+<!--                              <v-list-item-title>{{ item.comment.id }}</v-list-item-title>-->
+<!--                            </v-list-item-content>-->
+<!--                          </v-list-item>-->
+<!--                        </v-list-item-group>-->
+<!--                      </v-list>-->
+
+<!--                    </v-menu>-->
+
+
                   </div>
 
                 </div>
@@ -291,12 +310,14 @@ Vue.use(VueChatScroll)
 export default {
   name: "index",
   data: () => ({
+    active: false,
     hidden: false,
     response: false,
     selectedItem: 1,
     responseComment: false,
     currentVideo: null,
     currentComment: null,
+    videoDataChoose:{},
     inVideo: {},
     getchallenge: {},
     commentList: {},
@@ -345,6 +366,7 @@ export default {
       this.getinvideo = await this.getVideoChallenge()
       console.log(this.getinvideo)
       this.CHALLENGECHOOSE = this.inchallenge
+      console.log(this.CHALLENGECHOOSE)
 
 
       this.response = true
@@ -445,8 +467,9 @@ export default {
       this.responseComment = true
       this.inVideo = video
       let pk = this.inVideo.video.id
-      this.commentList = await this.getVideoChallenge(pk)
-      // console.log(this.commentList[0])
+      console.log(pk)
+      this.commentList = await this.getVideoChallengeById(pk)
+      console.log(this.commentList)
       this.currentComment = this.commentList[0]
       this.dialog2 = true
       // console.log(this.inVideo.video.user)
@@ -471,6 +494,8 @@ export default {
           let pk = this.inVideo.video.id
           this.commentList = await this.getVideoChallenge(pk)
           await this.loadData()
+          var objDiv = document.getElementById("comment_scroll");
+          objDiv.scrollTop = objDiv.scrollHeight - objDiv.clientHeight;
           await this.clearForm()
 
 
@@ -485,6 +510,16 @@ export default {
     async enterPress() {
       await this.saveComment()
     },
+
+    async getTitleVideo(id) {
+      this.hidden = true
+      let data = await this.getVideoUpdate(id)
+      this.videoDataChoose = data
+      console.log(this.videoDataChoose)
+      return data
+
+    },
+
     async deleteComment(id) {
       console.log(id)
       if (confirm('Do you want to delete?')) {
@@ -496,6 +531,21 @@ export default {
           await this.loadData()
         }
       }
+    },
+
+    async editVideoTitle() {
+
+      let data = await this.editVideoChallenge(this.videoDataChoose)
+      console.log(data)
+      let pk = this.inVideo.video.id
+      this.commentList = await this.getVideoChallenge(pk)
+
+
+      return data
+
+    },
+    mouseOver: function(){
+      this.active = !this.active;
     }
 
 
